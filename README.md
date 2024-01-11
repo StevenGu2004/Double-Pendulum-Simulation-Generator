@@ -4,7 +4,10 @@
 
 This project simulates the motion of a double pendulum with equations of motion obtained using Lagrangian Mechanics and animations created using Matplotlib, then saves it as an '.mp4' file. Optionally, the user can also generate an animation for the energies time series of the pendulum system. 
 
+## Demo images of the simulations
+### Double pendulum in motion
 ![dp_demo](https://github.com/StevenGu2004/Double-Pendulum-Simulation-Generator/assets/93726536/69414bab-6cb3-47db-bbaf-cde2f1f91c5e)
+### Time series for the energies of multiple double pendulum systems
 ![dp_energies_demo](https://github.com/StevenGu2004/Double-Pendulum-Simulation-Generator/assets/93726536/7ef72f9c-e7c6-40fe-a540-cdd1f73f7345)
 
 ## Notes
