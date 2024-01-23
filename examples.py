@@ -8,7 +8,6 @@ running this script in for setting the initial conditions of some examples.
 """
 
 # TODO add more test cases for varying parameters!
-# TODO re-call some of the examples due to energy labels not showing with dark_bg  (4, 6, 7)
 
 from numpy import pi
 from time import perf_counter

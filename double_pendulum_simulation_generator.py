@@ -363,8 +363,9 @@ class DoublePendulumAnimated:
                 dp, dpl, dpt = dp_list[j]
                 x1, y1, x2, y2 = position_list[j]
                 p1, w1, p2, w2 = sol_list[j]
-                # changed to return
-                return animate_dp(i, origin, trace_list_list[j], self.trace_size, dp, dpl, dpt, x1, y1, x2, y2, p1, w1, p2, w2)
+                # Return since using blitting
+                return animate_dp(i, origin, trace_list_list[j], self.trace_size,
+                                  dp, dpl, dpt, x1, y1, x2, y2, p1, w1, p2, w2)
 
         def animate_all_energies(i: float):
             """
