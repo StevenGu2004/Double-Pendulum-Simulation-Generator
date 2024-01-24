@@ -1,14 +1,16 @@
 """
 Double Pendulum Simulation Generator
 
-This script can be used to generate a simulation of the motion of a double pendulum with equations of motion 
-obtained using Lagrangian Mechanics and animations created using Matplotlib, then saves it as an '.mp4' file. 
-Optionally, the user can also generate an animation for the energies time series of the pendulum system. 
-The double pendulum simulations are stored as a class object, with all the customizable initial conditions 
-and add-ons to be passed as optional parameters when initializing the class object.
+This script can be used to generate a simulation of the motion of a double pendulum 
+with equations of motion obtained using Lagrangian Mechanics and animations created 
+using Matplotlib, then saves it as an '.mp4' file. 
+Optionally, the user can also generate an animation for the energies time series 
+of the pendulum system. The double pendulum simulations are stored as a class object, 
+with all the customizable initial conditions and add-ons to be passed as 
+optional parameters when initializing the class object.
 
-This script requires that 'scipy', 'numpy', 'matplotlib', and 'itertools' to be installed within the Python
-environment you are running this script in.
+This script requires that 'scipy', 'numpy', 'matplotlib', and 'itertools' 
+to be installed within the Python environment you are running this script in.
 
 Example
 -------
@@ -16,20 +18,20 @@ Example
 
 Notes
 -----
-    The user must have 'ffmpeg' installed before generating any animations, as it is required in order to save the results
-    in an '.mp4' format.
+    The user must have 'ffmpeg' installed before generating any animations, 
+    as it is required in order to save the results in an '.mp4' format.
 
-    The animations could take a very long time to run if a long animation duration is passed (e.g. 20 seconds). Lowering the 
-    fps when creating the class object could help.
+    The animations could take a very long time to run if a long animation duration 
+    is passed (e.g. 20 seconds). Lowering the fps when creating the class object could help.
 """
 
 from itertools import cycle
+import numpy as np
+from scipy.integrate import odeint
 from matplotlib.collections import PathCollection, LineCollection
 from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 from matplotlib.animation import FuncAnimation
 import matplotlib.pyplot as plt
-from scipy.integrate import odeint
-import numpy as np
 import matplotlib
 # Stops matplotlib from generating an animation inline or other backends
 matplotlib.use("Agg")
@@ -52,15 +54,27 @@ class DoublePendulumAnimated:
 
         Optional Parameters
         -------------------
-        n : Number of double pendulums simulated
-        fps : Frame per second for the video created
-        t_end : Length of animation
-        p : Physical parameters for the system [m1, m2, l1, l2, g]
-            Note: positive g is gravity pointed downwards
-        name : Name of the '.mp4' file created
-        trace_size : Number of trailing dots behind the lower mass blob (visual aesthetic)
-        variation : Variating spacing between the n-simulated double pendulums
-        ic : Initial condition for the system [p1, w1, p2, w2] 
+        n :
+            Number of double pendulums simulated
+        fps : 
+            Frame per second for the video created
+        t_end : 
+            Length of animation
+        p : 
+            Physical parameters for the system [m1, m2, l1, l2, g]
+            Note: 
+                positive g is gravity pointed downwards; all units use
+                kg for mass, meter for length, and second for time
+        name : 
+            Name of the '.mp4' file created
+        trace_size : 
+            Number of trailing dots behind the lower mass blob (visual aesthetic)
+        variation : 
+            Variating spacing between the n-simulated double pendulums
+        ic : 
+            Initial condition for the system [p1, w1, p2, w2] 
+            Note: counter-clockwise is the positive direction; all units use
+                  radian for angular displacement, and second for time
         """
 
         # Exceptions
@@ -76,10 +90,10 @@ class DoublePendulumAnimated:
         if not isinstance(p, list) or len(p) != 5 or \
                 not all((isinstance(val, float) or isinstance(val, int)) for val in p) or \
                 not all(val > 0 for val in p[:-1]):
-            raise ValueError("p must be a list of five floats or integers representing [m1, m2, l1, l2, g], "
+            raise ValueError("p must be a list of five floats or integers representing "
+                             "[m1, m2, l1, l2, g], "
                              "with positive values for all string lengths and masses.")
 
-        # trying to improve name setter
         if not isinstance(name, str):
             raise ValueError("name must be a str.")
 
@@ -120,12 +134,17 @@ class DoublePendulumAnimated:
 
         Optional Parameter
         ------------------
-        animate_dp : Generate an an animation of the motion of the system (if true) 
-        animate_energy : Generate an animated time series of the energies of the system (if true) 
-        scrolling : Animates the energy graphs dynamically by only displaying a chunk (five seconds interval)
-                    of the graph at any given time (if true)
-        update_title_elements : Update the angular positions and angular velocities in the title (if true)
-        dark_bg : Sets the background color of the animation to be black instead of white (if true)
+        animate_dp : 
+            Generate an an animation of the motion of the system (if true) 
+        animate_energy : 
+            Generate an animated time series of the energies of the system (if true) 
+        scrolling : 
+            Animates the energy graphs dynamically by only displaying a chunk 
+            (five seconds interval) of the graph at any given time (if true)
+        update_title_elements : 
+            Update the angular physical quantities in the title (if true)
+        dark_bg : 
+            Set the background color of the animation to be black instead of white (if true)
 
         """
 
@@ -136,8 +155,10 @@ class DoublePendulumAnimated:
 
             Optional Parameter
             ------------------
-            dp : Figure for animating double pendulum animation (if true) 
-            energy : Figure for animating time series energy graph (if true) 
+            dp : 
+                Figure for animating double pendulum animation (if true) 
+            energy : 
+                Figure for animating time series energy graph (if true) 
 
             Return
             ------
@@ -149,8 +170,7 @@ class DoublePendulumAnimated:
                 fig, ax = plt.subplots(1, 1)
             if dp or energy:
                 return fig, ax
-            else:
-                return
+            return
 
         def get_image(path: str,
                       zoom: float = 1) -> OffsetImage:
@@ -159,11 +179,13 @@ class DoublePendulumAnimated:
 
             Parameter
             ---------
-            path : Path of image in file folder
+            path : 
+                Path of image in file folder
 
-            Default Parameter
-            -----------------
-            zoom : Controls size of image
+            Optional Parameter
+            ------------------
+            zoom : 
+                Controls size of image
 
             Return
             ------ 
@@ -172,22 +194,26 @@ class DoublePendulumAnimated:
             return OffsetImage(plt.imread(path), zoom=zoom)
 
         def dp_rhs(v: np.ndarray,
-                   t: float,
+                   t: float,    # Needed for odeint
                    p: np.ndarray) -> list:
             """
             Define the differential equations for the double pendulum system.
 
             Parameters
             ----------
-            v : Vector of the state variables 
+            v : 
+                Vector of the state variables 
                 v = [p1,w1,p2,w2]
-            t : Time
-            p : Vector of the parameters:
+            t : 
+                Time
+            p : 
+                Vector of the parameters:
                 p = [m1,m2,l1,l2,g]
 
             Return
             ------
-            f :  List of the dp_rhs equations for the 4 ODES
+            f :  
+                List of the dp_rhs equations for the 4 ODES
             """
             p1, w1, p2, w2 = v
             m1, m2, l1, l2, g = p
@@ -208,21 +234,30 @@ class DoublePendulumAnimated:
                          l1: float,
                          l2: float) -> tuple:
             """
-            Get the 2D cartesian positions of the pendulum masses using the angles and lengths of strings. 
+            Get the 2D cartesian positions of the pendulum masses 
+            using the angles and lengths of strings. 
 
             Parameters
             ----------
-            p1 : Angle made with vertical of upper mass
-            p2 : Angle made with vertical of lower mass 
-            l1 : String attaching fixed origin and upper mass
-            l2 : String attaching upper mass and lower mass
+            p1 : 
+                Angle made with vertical of upper mass
+            p2 : 
+                Angle made with vertical of lower mass 
+            l1 : 
+                String attaching fixed origin and upper mass
+            l2 : 
+                String attaching upper mass and lower mass
 
             Returns
             -------
-            x1 : X coordinate of upper mass
-            y1 : Y coordinate of upper mass
-            x2 : X coordinate of lower mass
-            y2 : Y coordinate of lower mass
+            x1 : 
+                X coordinate of upper mass
+            y1 : 
+                Y coordinate of upper mass
+            x2 : 
+                X coordinate of lower mass
+            y2 : 
+                Y coordinate of lower mass
             (All coordinates relative to the coordinate system used by the matplotlib.animation class)
             """
             return (l1*np.sin(p1),
@@ -246,7 +281,8 @@ class DoublePendulumAnimated:
 
             Parameter
             ---------
-            data_list : List of time series to be segmented
+            data_list : 
+                List of time series to be segmented
 
             Return
             ------
@@ -257,27 +293,42 @@ class DoublePendulumAnimated:
         def animate_dp(i: float, origin: list, trace_list: list, trace_size: int,
                        dp: plt.Line2D, dpl: plt.Line2D, dpt: PathCollection,
                        x1: np.ndarray, y1: np.ndarray, x2: np.ndarray, y2: np.ndarray,
-                       p1: np.ndarray, w1: np.ndarray, p2: np.ndarray, w2: np.ndarray) -> tuple:
+                       p1: np.ndarray, w1: np.ndarray, p2: np.ndarray, w2: np.ndarray) -> None:
             """
             Helper function for animating the double pendulums. Updates the values of all dp graphs.
 
             Parameters
             ---------
-            i : Current frame
-            origin : Origin of animation (0,0)
-            trace_list : Position queue of the trailing dots
-            trace_size : Size of trace_list
-            dp : Collection of the double pendulum mass blobs to be animated
-            dpl : Collection of the black lines of the double pendulum
-            dpt : Collection of the traces of points
-            x1 : X coordinate of upper mass
-            y1 : Y coordinate of upper mass
-            x2 : X coordinate of lower mass
-            y2 : Y coordinate of lower mass
-            p1 : Angle made with vertical of upper mass
-            w1 : Angular velocity of upper mass
-            p2 : Angle made with vertical of lower mass 
-            w2 : Angular velocity of lower mass
+            i : 
+                Current frame
+            origin : 
+                Origin of animation (0,0)
+            trace_list : 
+                Position queue of the trailing dots
+            trace_size : 
+                Size of trace_list
+            dp : 
+                Collection of the double pendulum mass blobs to be animated
+            dpl : 
+                Collection of the black lines of the double pendulum
+            dpt : 
+                Collection of the traces of points
+            x1 : X 
+                coordinate of upper mass
+            y1 : Y 
+                coordinate of upper mass
+            x2 : 
+                X coordinate of lower mass
+            y2 : 
+                Y coordinate of lower mass
+            p1 : 
+                Angle made with vertical of upper mass
+            w1 : 
+                Angular velocity of upper mass
+            p2 : 
+                Angle made with vertical of lower mass 
+            w2 : 
+                Angular velocity of lower mass
             (All coordinates relative to the coordinate system used by the matplotlib.animation class)
             """
             dp.set_data([x1[i], x2[i]], [y1[i], y2[i]])
@@ -304,23 +355,27 @@ class DoublePendulumAnimated:
                                 f"$\phi_2({round(t, 2)})$ = {round(p2[i], 2)},  "
                                 f"$\omega_2({round(t, 2)})$ = {round(w2[i], 2)}",
                                 color=contrast_color)
-            return (dp, dpl, dpt)   # added return statement for blitting
 
         def animate_energy(i: float,
                            ke_lc: LineCollection,
                            pe_lc: LineCollection,
                            ke: np.ndarray,
-                           pe: np.ndarray):
+                           pe: np.ndarray) -> None:
             """
             Helper function for animating the energies graphs.
 
             Parameters
             ----------
-            i : Current frame
-            ke_lc : LineCollection of the kinetic energy time series
-            pe_lc : LineCollection of the potential energy time series
-            ke : Time series of kinetic energy
-            pe : Time Series of potential energy
+            i : 
+                Current frame
+            ke_lc : 
+                LineCollection of the kinetic energy time series
+            pe_lc : 
+                LineCollection of the potential energy time series
+            ke : 
+                Time series of kinetic energy
+            pe : 
+                Time Series of potential energy
             """
             t = i*t_proportion  # Current t
             max_e = max(ke[i], pe[i])
@@ -351,29 +406,30 @@ class DoublePendulumAnimated:
             ke_lc.set_alpha(1*(t_interval <= t))
             pe_lc.set_alpha(1*(t_interval <= t))
 
-        def animate_all_dps(i: float):
+        def animate_all_dps(i: float) -> None:
             """
             Animate all pendulums. 
 
             Parameter
             ---------
-            i : Current frame
+            i : 
+                Current frame
             """
             for j in range(self.n):
                 dp, dpl, dpt = dp_list[j]
                 x1, y1, x2, y2 = position_list[j]
                 p1, w1, p2, w2 = sol_list[j]
-                # Return since using blitting
-                return animate_dp(i, origin, trace_list_list[j], self.trace_size,
-                                  dp, dpl, dpt, x1, y1, x2, y2, p1, w1, p2, w2)
+                animate_dp(i, origin, trace_list_list[j], self.trace_size,
+                           dp, dpl, dpt, x1, y1, x2, y2, p1, w1, p2, w2)
 
-        def animate_all_energies(i: float):
+        def animate_all_energies(i: float) -> None:
             """
             Animate all energy graphs. 
 
             Parameter
             ---------
-            i : Current frame
+            i : 
+                Current frame
             """
             for j in range(self.n):
                 current_ke_lc = ke_lc[j]
@@ -383,15 +439,17 @@ class DoublePendulumAnimated:
                 animate_energy(i, current_ke_lc, current_pe_lc,
                                current_ke, current_pe)
 
-        def set_fig_ax_parameters(set_dp: bool = False, set_energy: bool = False):
+        def set_fig_ax_parameters(set_dp: bool = False, set_energy: bool = False) -> None:
             """ 
             Set up the figure and axis for the respective animation. This method should 
             only ben called after the initialization of the respective figure and axis.
 
             Parameters
             ----------
-            set_dp : Set up the figure and axis of the double pendulum motion animation
-            set_energy : Set up the figure and axis of the time series energy graph animation
+            set_dp : 
+                Set up the figure and axis of the double pendulum motion animation
+            set_energy : 
+                Set up the figure and axis of the time series energy graph animation
             """
             if set_dp:
                 # To ensure these values don't crowd the animation,
@@ -427,9 +485,9 @@ class DoublePendulumAnimated:
 
         # Initializing variables
         m1, m2, l1, l2, g = self.p[0], self.p[1], self.p[2], self.p[3], self.p[4]
-        N = int(self.fps * self.t_end + 1)  # Number of frames/points
-        t_interval = np.linspace(0, self.t_end, N)
-        t_proportion = self.t_end/(N-1)  # Used for animating energies
+        frames = int(self.fps * self.t_end + 1)  # Number of frames/points
+        t_interval = np.linspace(0, self.t_end, frames)
+        t_proportion = self.t_end/(frames-1)  # Used for animating energies
 
         # Image Path
         hinge_path = 'nail.png'
@@ -482,7 +540,7 @@ class DoublePendulumAnimated:
         if dark_bg:
             # Dark background
             contrast_color = "white"
-            if animate_dp:
+            if animating_dp:
                 dp_ax.set_facecolor("k")
                 dp_fig.set_facecolor("black")
                 dp_ax.set_facecolor("black")
@@ -533,9 +591,7 @@ class DoublePendulumAnimated:
             # Initial conditions
             current_ic = self.ic.copy()
             current_ic[0] -= i*self.variation
-            # current_ic[1] *= -1
             current_ic[2] -= i*self.variation
-            # current_ic[3] *= -1
 
             # 2D array containing p1, w1, p2, w2
             sol = odeint(dp_rhs, current_ic, t_interval,
@@ -577,9 +633,9 @@ class DoublePendulumAnimated:
         if animating_dp:
             dp_ani = FuncAnimation(dp_fig,
                                    animate_all_dps,
-                                   frames=N-1,
+                                   frames=frames-1,
                                    interval=1,
-                                   blit=True)
+                                   blit=False)   # Set to False as it fails when self.n > 1
 
             dp_ani.save(self.name + '.mp4',
                         writer='ffmpeg',  # Install ffmpeg prior to running code
@@ -589,9 +645,9 @@ class DoublePendulumAnimated:
             energy_ax.autoscale_view()
             energy_ani = FuncAnimation(energy_fig,
                                        animate_all_energies,
-                                       frames=N-1,
+                                       frames=frames-1,
                                        interval=1,
-                                       blit=False)
+                                       blit=False)  # Doesn't work with the method chosen
 
             energy_ani.save(self.name + '_energies' + '.mp4',
                             writer='ffmpeg',  # Install ffmpeg prior to running code
