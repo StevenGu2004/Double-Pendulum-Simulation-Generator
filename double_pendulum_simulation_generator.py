@@ -620,7 +620,7 @@ class DoublePendulumAnimated:
                 ke = 0.5*m1*l1*l1*w1*w1 + 0.5*m2 * \
                     (l1*l1*w1*w1 + l2*l2*w2*w2 + 2*l1*l2*np.cos(p1-p2))
                 pe = -(m1+m2)*abs(g)*l1*np.cos(p1) - m2*abs(g) * \
-                    l2*np.cos(p2)    # added abs() for g
+                    l2*np.cos(p2)
                 ke_list.append(ke)
                 pe_list.append(pe)
                 ke_lc.append(LineCollection(segmentation(
