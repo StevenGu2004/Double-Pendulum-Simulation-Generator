@@ -141,6 +141,8 @@ class DoublePendulumAnimated:
         scrolling : 
             Animates the energy graphs dynamically by only displaying a chunk 
             (five seconds interval) of the graph at any given time (if true)
+            Note:
+                scrolling would only have an effect if t_end > 5
         update_title_elements : 
             Update the angular physical quantities in the title (if true)
         dark_bg : 
@@ -396,7 +398,7 @@ class DoublePendulumAnimated:
                     energy_ax.set_ylim(lowest_potential -
                                        y_padding, y_lim + y_padding)
                     energy_ax.yaxis.set_ticks(np.linspace(
-                        lowest_potential + y_padding, y_lim + y_padding, 5))
+                        lowest_potential, y_lim + y_padding, 5))    # remove y_padding from low
 
                 if (t >= initial_xlim) or (max_e >= current_ylim_dict['current_ylim']):
                     energy_ax.tick_params(colors=contrast_color)
@@ -515,21 +517,20 @@ class DoublePendulumAnimated:
             set_fig_ax_parameters(set_energy=True)
             lowest_potential = -abs(g)*(m1*l1 + m2*(l1+l2))
             x_padding = self.t_end/20
-            y_padding = 15
+            y_padding = lowest_potential/10
             if scrolling:
-                # Scrolling energy graph
                 initial_xlim = self.t_end if self.t_end < 5 else 5
-                energy_ax.set_xlim(-x_padding, initial_xlim)
+                energy_ax.set_xlim(0, initial_xlim + x_padding)
                 energy_x_start, energy_x_end = energy_ax.get_xlim()
                 energy_ax.xaxis.set_ticks(np.linspace(
-                    energy_x_start + x_padding, energy_x_end, 5))
+                    energy_x_start, energy_x_end - x_padding, 5))
 
                 initial_ylim = 50
                 current_ylim_dict = {'current_ylim': initial_ylim}
                 energy_ax.set_ylim(lowest_potential - y_padding, initial_ylim)
-                energy_y_start, energy_y_end = energy_ax.get_ylim()
+                energy_y_end = energy_ax.get_ylim()[1]
                 energy_ax.yaxis.set_ticks(np.linspace(
-                    energy_y_start + y_padding, energy_y_end, 5))
+                    lowest_potential, energy_y_end, 5))
 
             # Containers for animating energies
             ke_lc = []
@@ -618,7 +619,8 @@ class DoublePendulumAnimated:
                 # Time series' values for the energies
                 ke = 0.5*m1*l1*l1*w1*w1 + 0.5*m2 * \
                     (l1*l1*w1*w1 + l2*l2*w2*w2 + 2*l1*l2*np.cos(p1-p2))
-                pe = -(m1+m2)*g*l1*np.cos(p1) - m2*g*l2*np.cos(p2)
+                pe = -(m1+m2)*abs(g)*l1*np.cos(p1) - m2*abs(g) * \
+                    l2*np.cos(p2)    # added abs() for g
                 ke_list.append(ke)
                 pe_list.append(pe)
                 ke_lc.append(LineCollection(segmentation(

@@ -22,8 +22,10 @@ def main():
     # dp1 = DoublePendulumAnimated(t_end=5, name="dp1")
     # dp1.generate_dps(animating_dp=True, update_title_elements=False, dark_bg=True)
     # dp2 = DoublePendulumAnimated(n=5, t_end=25, name="dp2", trace_size=10)
-    # dp2.generate_dps(animating_energy=True, scrolling=True, dark_bg=False)
-    # dp3 = DoublePendulumAnimated(n=2, fps=45, t_end=1, name="dp3", trace_size=200)
+    # dp2.generate_dps(animating_energy=True,
+    #                  scrolling=True, dark_bg=False)
+    # dp3 = DoublePendulumAnimated(
+    #     n=2, fps=45, t_end=1, name="dp3", trace_size=200)
     # dp3.generate_dps(animating_energy=True, scrolling=False, dark_bg=True)
     # dp4 = DoublePendulumAnimated(
     #     n=3, fps=200, t_end=3, name="dp4", trace_size=0, variation=pi/3, ic=[3*pi/4, -4, 0, 6])
@@ -34,7 +36,8 @@ def main():
     #                              2, 3, 5, 7, 11], ic=[pi/4, -2, pi/16, -2])
     # dp6.generate_dps(animating_energy=True, scrolling=True, dark_bg=True)
     # dp7 = DoublePendulumAnimated(name="dp7", p=[1, 1, 1, 1, -9.8])
-    # dp7.generate_dps(animating_energy=True, update_title_elements=False)
+    # dp7.generate_dps(animating_dp=False, animating_energy=True,
+    #                  update_title_elements=False)
     # dp8 = DoublePendulumAnimated(n=4, fps=30, t_end=5, p=[
     #                              140, 100, 3, 6, 9.8], name="dp8", trace_size=0, variation=pi/7, ic=[pi, 0, pi, 3])
     # dp8.generate_dps(animating_dp=True, animating_energy=True,
