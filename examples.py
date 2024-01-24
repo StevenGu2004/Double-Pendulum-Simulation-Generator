@@ -21,7 +21,7 @@ def main():
     # dp_unnamed.generate_dps(animating_energy=True, update_title_elements=False)
     # dp1 = DoublePendulumAnimated(t_end=5, name="dp1")
     # dp1.generate_dps(animating_dp=True, update_title_elements=False, dark_bg=True)
-    # dp2 = DoublePendulumAnimated(n=5, fps=60, t_end=25, name="dp2", trace_size=10)
+    # dp2 = DoublePendulumAnimated(n=5, t_end=25, name="dp2", trace_size=10)
     # dp2.generate_dps(animating_energy=True, scrolling=True, dark_bg=False)
     # dp3 = DoublePendulumAnimated(n=2, fps=45, t_end=1, name="dp3", trace_size=200)
     # dp3.generate_dps(animating_energy=True, scrolling=False, dark_bg=True)
