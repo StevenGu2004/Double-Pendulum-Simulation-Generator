@@ -13,7 +13,7 @@ https://github.com/StevenGu2004/Double-Pendulum-Simulation-Generator/assets/9372
 
 ## Notes
 - The user must have 'ffmpeg' installed before generating any animations, as it is required to save the results in a '.mp4' format
-- The animations could take a very long time to run if a long animation duration is passed (e.g. 20 seconds) but lowering the fps when creating the class object would help
+- The animations could take a very long time to run if a long animation duration (e.g. 20 seconds) is used but lowering the fps when creating the class object would help
 
 
 ## Known Issues (Work in Progress)
