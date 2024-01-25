@@ -9,7 +9,7 @@ This project simulates the motion of a double pendulum with equations of motion 
 https://github.com/StevenGu2004/Double-Pendulum-Simulation-Generator/assets/93726536/b5e107b1-69b5-4a44-b32c-a71fb49f289e
 
 ### Time series for the energies of multiple double pendulum systems
-https://github.com/StevenGu2004/Double-Pendulum-Simulation-Generator/assets/93726536/6711f387-7a7d-4ef4-8ede-ea3653d0c1bb
+https://github.com/StevenGu2004/Double-Pendulum-Simulation-Generator/assets/93726536/9a8dbb60-90ef-4724-bec8-38b125483729
 
 ## Notes
 - The user must have 'ffmpeg' installed before generating any animations, as it is required to save the results in a '.mp4' format
