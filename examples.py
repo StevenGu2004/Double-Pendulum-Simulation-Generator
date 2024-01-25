@@ -7,8 +7,6 @@ This script requires 'numpy' to be installed within the Python environment you a
 running this script in for setting the initial conditions of some examples.
 """
 
-# TODO add more test cases for varying parameters!
-
 from time import perf_counter
 from numpy import pi
 from double_pendulum_simulation_generator import DoublePendulumAnimated
@@ -46,7 +44,7 @@ def main():
     # dp8 = DoublePendulumAnimated(n=4, fps=30, t_end=5,
     #                              p=[140, 100, 3, 6, 9.8], name="dp8", trace_size=0,
     #                              variation=pi/7, ic=[pi, 0, pi, 3])
-    # dp8.generate_dps(animating_dp=False, animating_energy=True,
+    # dp8.generate_dps(animating_energy=True,
     #                  scrolling=True, dark_bg=True)
     # dp9 = DoublePendulumAnimated(fps=15, name="dp9")
     # dp9.generate_dps(animating_dp=False, animating_energy=True, scrolling=True)
