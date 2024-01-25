@@ -517,7 +517,7 @@ class DoublePendulumAnimated:
             set_fig_ax_parameters(set_energy=True)
             lowest_potential = -abs(g)*(m1*l1 + m2*(l1+l2))
             x_padding = self.t_end/20
-            y_padding = lowest_potential/10
+            y_padding = abs(lowest_potential)/10
             if scrolling:
                 initial_xlim = self.t_end if self.t_end < 5 else 5
                 energy_ax.set_xlim(0, initial_xlim + x_padding)
@@ -645,6 +645,20 @@ class DoublePendulumAnimated:
 
         if animating_energy:
             energy_ax.autoscale_view()
+            if not scrolling or self.t_end < 5:  # Add U_min onto y-axis' ticks
+                # Check if U_min is too close to next smallest tick
+                tick_threshold = abs(lowest_potential/8)
+                _ticks = []  # Ticks to be removed
+                y_ticks = list(energy_ax.get_yticks())
+                for tick in y_ticks:
+                    if tick <= lowest_potential:
+                        _ticks.append(tick)
+                for tick in _ticks:
+                    y_ticks.remove(tick)
+                if y_ticks[0] - lowest_potential < tick_threshold:
+                    y_ticks.pop(0)
+                energy_ax.set_yticks([lowest_potential] + y_ticks)
+
             energy_ani = FuncAnimation(energy_fig,
                                        animate_all_energies,
                                        frames=frames-1,
