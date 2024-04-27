@@ -25,6 +25,10 @@ Notes
     is passed (e.g. 20 seconds). Lowering the fps when creating the class object could help.
 """
 
+# TODO Implement PyQT6 for GUI
+# TODO Create a window that allows user to type (or drag?) the value of the parameters
+# TODO Button to generate a new window of the mp4 file(s) [StackOverflow had a solution]
+
 from itertools import cycle
 import numpy as np
 from scipy.integrate import odeint
