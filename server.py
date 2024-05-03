@@ -11,4 +11,8 @@ def index():
 
 
 if __name__ == "__main__":
+    # NOTE: Delete the previous terminal when running the server
+
+    # print("Updating server...") for some reason printing breaks everything :/
     serve(app, host="0.0.0.0", port=8000)
+    # print("Finished serving server.")
